@@ -1,0 +1,13 @@
+# virtualenvs (besar, dibuat ulang via venv + pip)
+venv_onnx/
+venv_tf/
+
+# python
+__pycache__/
+*.pyc
+
+# dataset gambar aligned LFW (103MB, reproducible via align; pairs.txt tetap di-track)
+dataset/lfw_aligned/
+
+# log eval mentah
+results/eval_log.txt
