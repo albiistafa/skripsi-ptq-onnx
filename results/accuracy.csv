@@ -1,0 +1,9 @@
+model,teknik,akurasi_%,std_%,dacc_poin,ukuran_MB,latensi_cpu_ms
+ghost,fp32,97.53,0.64,+0.00,16.51,15.39
+ghost,M1_dyn,97.47,0.74,-0.07,4.62,27.21
+ghost,M2_fp16,GAGAL,,,8.39,
+ghost,M3_qdq,96.62,0.70,-0.92,4.86,33.21
+edge,fp32,97.55,0.53,+0.00,14.85,7.22
+edge,M1_dyn,97.37,0.63,-0.18,4.26,17.18
+edge,M2_fp16,GAGAL,,,7.63,
+edge,M3_qdq,52.57,2.20,-44.98,4.71,20.67
