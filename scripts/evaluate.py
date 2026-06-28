@@ -9,12 +9,29 @@ Latensi di sini = CPU desktop (median 50 iter) sebagai proxy; latensi Android
 """
 import csv
 import os
+import pickle
 import sys
 import time
 import numpy as np
 import onnxruntime as ort
 
-from common import (ONNX_DIR, RESULTS_DIR, MODELS, load_pairs, load_img, to_layout)
+from common import (ROOT, ONNX_DIR, RESULTS_DIR, MODELS, load_img, to_layout)
+
+# Sumber EVALUASI: InsightFace lfw.bin yg sudah diekstrak (01c_download_aligned_lfw.py).
+ALIGNED_PAIRS_PKL = os.path.join(ROOT, "data", "pairs", "eval_pairs_aligned.pkl")
+
+
+def load_pairs():
+    """Baca eval_pairs_aligned.pkl -> (pairs, folds).
+
+    pairs: [(path_a, path_b, label)], label 1=genuine. Protokol LFW:
+    10 fold x 600 pasang berurutan -> fold = idx // 600.
+    """
+    with open(ALIGNED_PAIRS_PKL, "rb") as f:
+        d = pickle.load(f)
+    pairs = d["pairs"]
+    folds = np.array([i // 600 for i in range(len(pairs))])
+    return pairs, folds
 
 
 class Tee:

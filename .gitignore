@@ -8,6 +8,11 @@ __pycache__/
 
 # dataset gambar aligned LFW (103MB, reproducible via align; pairs.txt tetap di-track)
 dataset/lfw_aligned/
+data/
 
 # log eval mentah
 results/eval_log.txt
+
+
+
+.DS_Store
