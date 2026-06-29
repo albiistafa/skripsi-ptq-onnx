@@ -16,3 +16,8 @@ results/eval_log.txt
 
 
 .DS_Store
+
+# gambar hasil ekstraksi .bin (reproducible via scripts/extract_bin.py)
+dataset/*_bin/
+dataset/lfwbin/
+dataset/lfw-aligned/

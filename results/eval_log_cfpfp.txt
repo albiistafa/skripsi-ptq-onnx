@@ -1,0 +1,68 @@
+[cfpfp] pasangan 7000 | citra unik 14000
+
+     embedding 2000/14000
+     embedding 4000/14000
+     embedding 6000/14000
+     embedding 8000/14000
+     embedding 10000/14000
+     embedding 12000/14000
+     embedding 14000/14000
+  ghost fp32     acc 93.67% +/- 1.29  dacc +0.00  16.51MB   13.48ms
+     embedding 2000/14000
+     embedding 4000/14000
+     embedding 6000/14000
+     embedding 8000/14000
+     embedding 10000/14000
+     embedding 12000/14000
+     embedding 14000/14000
+  ghost M1_dyn   acc 92.00% +/- 1.74  dacc -1.67   4.62MB   39.66ms
+     embedding 2000/14000
+     embedding 4000/14000
+     embedding 6000/14000
+     embedding 8000/14000
+     embedding 10000/14000
+     embedding 12000/14000
+     embedding 14000/14000
+  ghost M2_fp16  acc 93.71% +/- 1.30  dacc +0.04   8.34MB   35.36ms
+     embedding 2000/14000
+     embedding 4000/14000
+     embedding 6000/14000
+     embedding 8000/14000
+     embedding 10000/14000
+     embedding 12000/14000
+     embedding 14000/14000
+  ghost M3_qdq   acc 86.96% +/- 1.25  dacc -6.71   4.86MB   44.61ms
+     embedding 2000/14000
+     embedding 4000/14000
+     embedding 6000/14000
+     embedding 8000/14000
+     embedding 10000/14000
+     embedding 12000/14000
+     embedding 14000/14000
+  edge  fp32     acc 95.89% +/- 1.04  dacc +0.00  14.85MB   11.16ms
+     embedding 2000/14000
+     embedding 4000/14000
+     embedding 6000/14000
+     embedding 8000/14000
+     embedding 10000/14000
+     embedding 12000/14000
+     embedding 14000/14000
+  edge  M1_dyn   acc 94.40% +/- 1.23  dacc -1.49   4.26MB   23.20ms
+     embedding 2000/14000
+     embedding 4000/14000
+     embedding 6000/14000
+     embedding 8000/14000
+     embedding 10000/14000
+     embedding 12000/14000
+     embedding 14000/14000
+  edge  M2_fp16  acc 95.87% +/- 1.06  dacc -0.01   8.42MB   25.42ms
+     embedding 2000/14000
+     embedding 4000/14000
+     embedding 6000/14000
+     embedding 8000/14000
+     embedding 10000/14000
+     embedding 12000/14000
+     embedding 14000/14000
+  edge  M3_qdq   acc 94.29% +/- 1.47  dacc -1.60  13.85MB   21.18ms
+
+-> /Users/albi/Documents/Skripsi/new-skripsi/results/accuracy_cfpfp.csv

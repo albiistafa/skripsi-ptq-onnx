@@ -1,0 +1,60 @@
+[calfw] pasangan 6000 | citra unik 12000
+
+     embedding 2000/12000
+     embedding 4000/12000
+     embedding 6000/12000
+     embedding 8000/12000
+     embedding 10000/12000
+     embedding 12000/12000
+  ghost fp32     acc 95.80% +/- 1.09  dacc +0.00  16.51MB   13.57ms
+     embedding 2000/12000
+     embedding 4000/12000
+     embedding 6000/12000
+     embedding 8000/12000
+     embedding 10000/12000
+     embedding 12000/12000
+  ghost M1_dyn   acc 95.58% +/- 1.19  dacc -0.22   4.62MB   28.48ms
+     embedding 2000/12000
+     embedding 4000/12000
+     embedding 6000/12000
+     embedding 8000/12000
+     embedding 10000/12000
+     embedding 12000/12000
+  ghost M2_fp16  acc 95.80% +/- 1.09  dacc +0.00   8.34MB   26.66ms
+     embedding 2000/12000
+     embedding 4000/12000
+     embedding 6000/12000
+     embedding 8000/12000
+     embedding 10000/12000
+     embedding 12000/12000
+  ghost M3_qdq   acc 93.18% +/- 1.21  dacc -2.62   4.86MB   28.12ms
+     embedding 2000/12000
+     embedding 4000/12000
+     embedding 6000/12000
+     embedding 8000/12000
+     embedding 10000/12000
+     embedding 12000/12000
+  edge  fp32     acc 95.62% +/- 1.07  dacc +0.00  14.85MB    7.56ms
+     embedding 2000/12000
+     embedding 4000/12000
+     embedding 6000/12000
+     embedding 8000/12000
+     embedding 10000/12000
+     embedding 12000/12000
+  edge  M1_dyn   acc 95.08% +/- 1.34  dacc -0.53   4.26MB   14.65ms
+     embedding 2000/12000
+     embedding 4000/12000
+     embedding 6000/12000
+     embedding 8000/12000
+     embedding 10000/12000
+     embedding 12000/12000
+  edge  M2_fp16  acc 95.62% +/- 1.07  dacc +0.00   8.42MB   18.90ms
+     embedding 2000/12000
+     embedding 4000/12000
+     embedding 6000/12000
+     embedding 8000/12000
+     embedding 10000/12000
+     embedding 12000/12000
+  edge  M3_qdq   acc 95.32% +/- 1.12  dacc -0.30  13.85MB   15.82ms
+
+-> /Users/albi/Documents/Skripsi/new-skripsi/results/accuracy_calfw.csv

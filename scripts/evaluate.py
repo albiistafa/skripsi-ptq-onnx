@@ -1,12 +1,18 @@
-"""Evaluasi 10-fold CV LFW + ukuran + latensi (CPU) untuk semua varian.
+"""Evaluasi 10-fold CV (LFW / CFP-FP) + ukuran + latensi CPU utk 8 model.
 
-Protokol LFW: 6000 pasangan, 10 fold. Tiap fold: threshold dari 9 fold lain,
-diuji pada fold tertahan. Cosine distance = 1 - cos_sim (embedding L2-norm).
-Output: results/accuracy.csv (Tabel B).
+SATU model, banyak uji: model onnx/*.onnx (sudah dikuantisasi+dikalibrasi sekali
+dgn LFW) dijalankan apa adanya pada pasangan benchmark berbeda. TIDAK ada
+kuantisasi/kalibrasi ulang per-benchmark.
 
-Latensi di sini = CPU desktop (median 50 iter) sebagai proxy; latensi Android
-(ONNX Runtime Mobile) diukur terpisah di perangkat.
+Protokol: tiap fold threshold dari 9 fold lain, diuji pada fold tertahan.
+Cosine distance = 1 - cos_sim (embedding L2-norm).
+Output: results/accuracy_<dataset>.csv.
+
+Latensi = CPU desktop (median 50 iter) proxy; latensi Android (ORT Mobile) terpisah.
+
+Pakai: PYTHONPATH=scripts python scripts/evaluate.py --dataset {lfw|cfpfp}
 """
+import argparse
 import csv
 import os
 import pickle
@@ -17,21 +23,22 @@ import onnxruntime as ort
 
 from common import (ROOT, ONNX_DIR, RESULTS_DIR, MODELS, load_img, to_layout)
 
-# Sumber EVALUASI: InsightFace lfw.bin yg sudah diekstrak (01c_download_aligned_lfw.py).
-ALIGNED_PAIRS_PKL = os.path.join(ROOT, "data", "pairs", "eval_pairs_aligned.pkl")
+# dataset -> pkl pasangan (dihasilkan scripts/extract_bin.py).
+PAIRS_PKL = {
+    "lfw":     os.path.join(ROOT, "data", "pairs_lfwbin.pkl"),
+    "cfpfp":   os.path.join(ROOT, "data", "pairs_cfpfp.pkl"),
+    "cfpff":   os.path.join(ROOT, "data", "pairs_cfpff.pkl"),
+    "agedb30": os.path.join(ROOT, "data", "pairs_agedb30.pkl"),
+    "calfw":   os.path.join(ROOT, "data", "pairs_calfw.pkl"),
+    "cplfw":   os.path.join(ROOT, "data", "pairs_cplfw.pkl"),
+}
 
 
-def load_pairs():
-    """Baca eval_pairs_aligned.pkl -> (pairs, folds).
-
-    pairs: [(path_a, path_b, label)], label 1=genuine. Protokol LFW:
-    10 fold x 600 pasang berurutan -> fold = idx // 600.
-    """
-    with open(ALIGNED_PAIRS_PKL, "rb") as f:
+def load_pairs(dataset):
+    """Baca pairs_<dataset>.pkl -> (pairs, folds). pairs: (a,b,label) 1=genuine."""
+    with open(PAIRS_PKL[dataset], "rb") as f:
         d = pickle.load(f)
-    pairs = d["pairs"]
-    folds = np.array([i // 600 for i in range(len(pairs))])
-    return pairs, folds
+    return d["pairs"], np.array(d["folds"])
 
 
 class Tee:
@@ -48,8 +55,6 @@ class Tee:
     def flush(self):
         self.term.flush(); self.log.flush()
 
-
-sys.stdout = Tee(os.path.join(RESULTS_DIR, "eval_log.txt"))
 
 VARIANTS = ["fp32", "M1_dyn", "M2_fp16", "M3_qdq"]
 NP_DTYPE = {"tensor(float)": np.float32, "tensor(float16)": np.float16}
@@ -103,11 +108,12 @@ def latency_ms(sess, layout, iters=50):
     return float(np.median(ts))
 
 
-def main():
-    pairs, folds = load_pairs()
+def main(dataset):
+    sys.stdout = Tee(os.path.join(RESULTS_DIR, f"eval_log_{dataset}.txt"))
+    pairs, folds = load_pairs(dataset)
     pairs = [(a, b, l) for (a, b, l) in pairs if os.path.exists(a) and os.path.exists(b)]
     uniq = sorted({p for a, b, _ in pairs for p in (a, b)})
-    print(f"pasangan {len(pairs)} | citra unik {len(uniq)}\n")
+    print(f"[{dataset}] pasangan {len(pairs)} | citra unik {len(uniq)}\n")
 
     rows = []
     base_acc = {}
@@ -141,13 +147,16 @@ def main():
                   f"  dacc {dacc:+5.2f}  {mb:5.2f}MB  {lat:6.2f}ms")
 
     os.makedirs(RESULTS_DIR, exist_ok=True)
-    with open(os.path.join(RESULTS_DIR, "accuracy.csv"), "w", newline="") as f:
+    out = os.path.join(RESULTS_DIR, f"accuracy_{dataset}.csv")
+    with open(out, "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["model", "teknik", "akurasi_%", "std_%", "dacc_poin",
                     "ukuran_MB", "latensi_cpu_ms"])
         w.writerows(rows)
-    print("\n-> results/accuracy.csv")
+    print(f"\n-> {out}")
 
 
 if __name__ == "__main__":
-    main()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--dataset", choices=list(PAIRS_PKL), default="lfw")
+    main(ap.parse_args().dataset)
